@@ -16,7 +16,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// "We're going to remove this L6 @ 6:37
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
