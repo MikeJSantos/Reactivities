@@ -35,7 +35,8 @@ var serviceProvider = scope.ServiceProvider;
 try
 {
     var dataContext = serviceProvider.GetRequiredService<DataContext>();
-    dataContext.Database.Migrate();
+    await dataContext.Database.MigrateAsync();
+    await Seed.SeedData(dataContext);
 }
 catch (Exception ex)
 {
