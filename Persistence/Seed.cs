@@ -4,96 +4,45 @@ namespace Persistence
 {
     public class Seed
     {
+        private const string Drinks = "drinks";
+        private const string London = "London";
+        private static readonly List<Activity> activities = [];
+
         public static async Task SeedData(DataContext context)
         {
             if (context.Activities.Any()) return;
-            
-            var activities = new List<Activity>
-            {
-                new() {
-                    Title = "Past Activity 1",
-                    Date = DateTime.UtcNow.AddMonths(-2),
-                    Description = "Activity 2 months ago",
-                    Category = "drinks",
-                    City = "London",
-                    Venue = "Pub",
-                },
-                new() {
-                    Title = "Past Activity 2",
-                    Date = DateTime.UtcNow.AddMonths(-1),
-                    Description = "Activity 1 month ago",
-                    Category = "culture",
-                    City = "Paris",
-                    Venue = "Louvre",
-                },
-                new() {
-                    Title = "Future Activity 1",
-                    Date = DateTime.UtcNow.AddMonths(1),
-                    Description = "Activity 1 month in future",
-                    Category = "culture",
-                    City = "London",
-                    Venue = "Natural History Museum",
-                },
-                new() {
-                    Title = "Future Activity 2",
-                    Date = DateTime.UtcNow.AddMonths(2),
-                    Description = "Activity 2 months in future",
-                    Category = "music",
-                    City = "London",
-                    Venue = "O2 Arena",
-                },
-                new() {
-                    Title = "Future Activity 3",
-                    Date = DateTime.UtcNow.AddMonths(3),
-                    Description = "Activity 3 months in future",
-                    Category = "drinks",
-                    City = "London",
-                    Venue = "Another pub",
-                },
-                new() {
-                    Title = "Future Activity 4",
-                    Date = DateTime.UtcNow.AddMonths(4),
-                    Description = "Activity 4 months in future",
-                    Category = "drinks",
-                    City = "London",
-                    Venue = "Yet another pub",
-                },
-                new() {
-                    Title = "Future Activity 5",
-                    Date = DateTime.UtcNow.AddMonths(5),
-                    Description = "Activity 5 months in future",
-                    Category = "drinks",
-                    City = "London",
-                    Venue = "Just another pub",
-                },
-                new() {
-                    Title = "Future Activity 6",
-                    Date = DateTime.UtcNow.AddMonths(6),
-                    Description = "Activity 6 months in future",
-                    Category = "music",
-                    City = "London",
-                    Venue = "Roundhouse Camden",
-                },
-                new() {
-                    Title = "Future Activity 7",
-                    Date = DateTime.UtcNow.AddMonths(7),
-                    Description = "Activity 2 months ago",
-                    Category = "travel",
-                    City = "London",
-                    Venue = "Somewhere on the Thames",
-                },
-                new() {
-                    Title = "Future Activity 8",
-                    Date = DateTime.UtcNow.AddMonths(8),
-                    Description = "Activity 8 months in future",
-                    Category = "film",
-                    City = "London",
-                    Venue = "Cinema",
-                }
-            };
+
+            AddActivity(-2, Drinks, London, "Pub");
+            AddActivity(-1, "culture", "Paris", "Louvre");
+            AddActivity(1, "culture", London, "Natural History Museum");
+            AddActivity(2, "music", London, "O2 Arena");
+            AddActivity(3, Drinks, London, "Another pub");
+            AddActivity(4, Drinks, London, "Yet Another pub");
+            AddActivity(5, Drinks, London, "Just another pub");
+            AddActivity(6, "music", London, "Roundhouse Camden");
+            AddActivity(7, "travel", London, "Somewhere on the Thames");
+            AddActivity(8, "film", London, "Cinema");
 
             await context.Activities.AddRangeAsync(activities);
             await context.SaveChangesAsync();
+        }
+
+        private static void AddActivity(int months, string category, string city, string venue)
+        {
+            var now = DateTime.UtcNow;
+            var isPast = int.IsNegative(months);
+            var activityNum = activities.Count(a => isPast ? a.Date < now : a.Date >= now) + 1;
+
+            var activity = new Activity()
+            {
+                Title = $"{(isPast ? "Past" : "Future")} Activity {activityNum}",
+                Date = now.AddMonths(months),
+                Description = $"Activity {int.Abs(months)} month(s) {(isPast ? "ago" : "in future")}",
+                Category = category,
+                City = city,
+                Venue = venue
+            };
+            activities.Add(activity);
         }
     }
 }
