@@ -12,6 +12,13 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("Default");
 services.AddDbContext<DataContext>(optionsAction => optionsAction.UseSqlite(connectionString));
+services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+    });
+});
 
 var app = builder.Build();
 
@@ -24,6 +31,8 @@ if (app.Environment.IsDevelopment())
 
 // "We're going to remove this L6 @ 6:37
 // app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
