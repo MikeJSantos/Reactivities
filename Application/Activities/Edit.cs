@@ -1,3 +1,4 @@
+using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
@@ -11,15 +12,16 @@ public class Edit
         public Activity Activity { get; set; }
     }
 
-    public class Handler(DataContext context) : IRequestHandler<Command>
+    public class Handler(DataContext context, IMapper mapper) : IRequestHandler<Command>
     {
         private DataContext _context = context;
+        private IMapper _mapper = mapper;
 
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
             var activity = await _context.Activities.FindAsync(request.Activity.Id);
-            activity.Title = request.Activity.Title;
-            await _context.SaveChangesAsync();
+            _mapper.Map(request.Activity, activity);
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
