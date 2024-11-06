@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Header, List } from "semantic-ui-react";
+import { List } from "semantic-ui-react";
 import { Activity } from "../models/activity";
+import NavBar from "./NavBar";
 
 function App() {
   const url = "http://localhost:5000/api/activities";
@@ -14,7 +15,7 @@ function App() {
 
   return (
     <div>
-      <Header as="h2" icon="users" content="Reactivities" />
+      <NavBar />
       <List>
         {activities.map((a) => (
           <List.Item key={a.id}>{a.title}</List.Item>
