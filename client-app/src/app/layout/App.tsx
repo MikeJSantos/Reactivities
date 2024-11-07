@@ -1,8 +1,9 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, List } from "semantic-ui-react";
-import { Activity } from "../models/activity";
+import { Container } from "semantic-ui-react";
 import NavBar from "./NavBar";
+import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
+import { Activity } from "../models/activity";
 
 function App() {
   const url = "http://localhost:5000/api/activities";
@@ -17,11 +18,7 @@ function App() {
     <>
       <NavBar />
       <Container style={{ marginTop: "7em" }}>
-        <List>
-          {activities.map((a) => (
-            <List.Item key={a.id}>{a.title}</List.Item>
-          ))}
-        </List>
+        <ActivityDashboard activities={activities} />
       </Container>
     </>
   );
