@@ -10,6 +10,7 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<
     Activity | undefined
   >(undefined);
+  const [editMode, setEditMode] = useState(false);
 
   const url = "http://localhost:5000/api/activities";
   useEffect(() => {
@@ -26,15 +27,27 @@ function App() {
     setSelectedActivity(undefined);
   }
 
+  function openForm(id?: string) {
+    id ? selectActivity(id!) : selectActivity_cancel();
+    setEditMode(true);
+  }
+
+  function closeForm() {
+    setEditMode(false);
+  }
+
   return (
     <>
-      <NavBar />
+      <NavBar openForm={openForm} />
       <Container style={{ marginTop: "7em" }}>
         <ActivityDashboard
           activities={activities}
           selectedActivity={selectedActivity}
           selectActivity={selectActivity}
           selectActivity_cancel={selectActivity_cancel}
+          editMode={editMode}
+          openForm={openForm}
+          closeForm={closeForm}
         />
       </Container>
     </>

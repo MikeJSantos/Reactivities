@@ -3,9 +3,10 @@ import { Activity } from "../../../app/models/activity";
 
 interface Props {
   activity: Activity | undefined;
+  closeForm: () => void;
 }
 
-export function ActivityForm({ activity }: Props) {
+export function ActivityForm({ activity, closeForm }: Props) {
   return (
     <Segment clearing>
       <Form>
@@ -20,7 +21,12 @@ export function ActivityForm({ activity }: Props) {
         <Form.Input placeholder="City">{activity?.city ?? ""}</Form.Input>
         <Form.Input placeholder="Venue">{activity?.venue ?? ""}</Form.Input>
         <Button floated="right" positive type="submit" content="Submit" />
-        <Button floated="right" type="button" content="Cancel" />
+        <Button
+          onClick={closeForm}
+          floated="right"
+          type="button"
+          content="Cancel"
+        />
       </Form>
     </Segment>
   );
