@@ -2,11 +2,10 @@ body {
   background-color: #eaeaea !important;
 }
 
-/* TODO: fix NavBar color */
 .ui.inverted.top.fixed.menu {
   background-image: linear-gradient(
     135deg,
-    rbg(24, 42, 115) 0%,
+    rgb(24, 42, 115) 0%,
     rgb(33, 138, 174) 69%,
     rgb(32, 167, 172) 89%
   ) !important;
