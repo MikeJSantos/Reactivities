@@ -23,12 +23,12 @@ function App() {
     setSelectedActivity(activities.find((a) => a.id == id));
   }
 
-  function selectActivity_cancel() {
+  function deselectActivity() {
     setSelectedActivity(undefined);
   }
 
   function openForm(id?: string) {
-    id ? selectActivity(id!) : selectActivity_cancel();
+    id ? selectActivity(id!) : deselectActivity();
     setEditMode(true);
   }
 
@@ -44,7 +44,7 @@ function App() {
           activities={activities}
           selectedActivity={selectedActivity}
           selectActivity={selectActivity}
-          selectActivity_cancel={selectActivity_cancel}
+          deselectActivity={deselectActivity}
           editMode={editMode}
           openForm={openForm}
           closeForm={closeForm}

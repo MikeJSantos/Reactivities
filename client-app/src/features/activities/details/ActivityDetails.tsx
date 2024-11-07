@@ -11,13 +11,13 @@ import { Activity } from "../../../app/models/activity";
 
 interface Props {
   activity: Activity;
-  selectActivity_cancel: () => void;
+  deselectActivity: () => void;
   openForm: (id: string) => void;
 }
 
 export function ActivityDetails({
   activity,
-  selectActivity_cancel,
+  deselectActivity,
   openForm,
 }: Props) {
   return (
@@ -42,7 +42,7 @@ export function ActivityDetails({
             basic
             color="grey"
             content="Close"
-            onClick={() => selectActivity_cancel()}
+            onClick={() => deselectActivity()}
           />
         </Button.Group>
       </CardContent>

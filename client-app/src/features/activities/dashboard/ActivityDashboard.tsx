@@ -8,7 +8,7 @@ interface Props {
   activities: Activity[];
   selectedActivity: Activity | undefined;
   selectActivity: (id: string) => void;
-  selectActivity_cancel: () => void;
+  deselectActivity: () => void;
   editMode: boolean;
   openForm: (id: string) => void;
   closeForm: () => void;
@@ -18,7 +18,7 @@ export default function ActivityDashboard({
   activities,
   selectedActivity,
   selectActivity,
-  selectActivity_cancel,
+  deselectActivity,
   editMode,
   openForm,
   closeForm,
@@ -32,7 +32,7 @@ export default function ActivityDashboard({
         {selectedActivity && !editMode && (
           <ActivityDetails
             activity={selectedActivity}
-            selectActivity_cancel={selectActivity_cancel}
+            deselectActivity={deselectActivity}
             openForm={openForm}
           />
         )}
