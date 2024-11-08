@@ -54,6 +54,7 @@ export function ActivityForm({
           value={activity.date}
           onChange={onChange}
           placeholder="Date"
+          type="date"
         />
         <Form.Input
           name="city"
