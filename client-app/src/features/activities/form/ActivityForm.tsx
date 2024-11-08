@@ -5,9 +5,14 @@ import { ChangeEvent, useState } from "react";
 interface Props {
   activity: Activity | undefined;
   closeForm: () => void;
+  createOrEditActivity: (activity: Activity) => void;
 }
 
-export function ActivityForm({ activity: _activity, closeForm }: Props) {
+export function ActivityForm({
+  activity: _activity,
+  closeForm,
+  createOrEditActivity,
+}: Props) {
   const initialState = _activity ?? {
     id: "",
     title: "",
@@ -18,9 +23,6 @@ export function ActivityForm({ activity: _activity, closeForm }: Props) {
     venue: "",
   };
   const [activity, setActivity] = useState(initialState);
-  function onSubmit() {
-    console.log(activity);
-  }
   function onChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     console.log(`${name}: ${value}`);
@@ -29,7 +31,7 @@ export function ActivityForm({ activity: _activity, closeForm }: Props) {
 
   return (
     <Segment clearing>
-      <Form onSubmit={onSubmit} autoComplete="off">
+      <Form onSubmit={() => createOrEditActivity(activity)} autoComplete="off">
         <Form.Input
           name="title"
           value={activity.title}

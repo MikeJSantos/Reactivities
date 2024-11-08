@@ -17,7 +17,7 @@ function App() {
     axios.get<Activity[]>(url).then((response) => {
       setActivities(response.data);
     });
-  }, [activities]);
+  }, []);
 
   function selectActivity(id: string) {
     setSelectedActivity(activities.find((a) => a.id == id));
@@ -36,6 +36,17 @@ function App() {
     setEditMode(false);
   }
 
+  function createOrEditActivity(activity: Activity) {
+    activity.id
+      ? setActivities([
+          ...activities.filter((a) => a.id !== activity.id),
+          activity,
+        ])
+      : setActivities([...activities, activity]);
+    setEditMode(false);
+    setSelectedActivity(activity);
+  }
+
   return (
     <>
       <NavBar openForm={openForm} />
@@ -48,6 +59,7 @@ function App() {
           editMode={editMode}
           openForm={openForm}
           closeForm={closeForm}
+          createOrEditActivity={createOrEditActivity}
         />
       </Container>
     </>
