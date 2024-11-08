@@ -5,6 +5,7 @@ import ActivityDashboard from "../../features/activities/dashboard/ActivityDashb
 import { Activity } from "../models/activity";
 import { v4 as uuid } from "uuid";
 import agent from "../api/agent";
+import LoadingComponent from "./LoadingComponent";
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -12,15 +13,17 @@ function App() {
     Activity | undefined
   >(undefined);
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     agent.Activities.list().then((response) => {
       let activities: Activity[] = [];
       response.forEach((activity) => {
         activity.date = activity.date.split("T")[0];
-        activities.push(activity);;
+        activities.push(activity);
       });
       setActivities(response);
+      setLoading(false);
     });
   }, []);
 
@@ -55,6 +58,8 @@ function App() {
   function deleteActivity(id: string) {
     setActivities([...activities.filter((a) => a.id !== id)]);
   }
+
+  if (loading) return <LoadingComponent content="Loading app" />;
 
   return (
     <>
