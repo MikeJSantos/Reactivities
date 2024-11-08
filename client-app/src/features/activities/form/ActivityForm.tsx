@@ -25,7 +25,6 @@ export function ActivityForm({
   const [activity, setActivity] = useState(initialState);
   function onChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
-    console.log(`${name}: ${value}`);
     setActivity({ ...activity, [name]: value });
   }
 
