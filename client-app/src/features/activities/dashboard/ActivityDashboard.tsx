@@ -32,7 +32,7 @@ export default function ActivityDashboard({
       <Grid.Column width="10">
         <ActivityList
           activities={activities}
-          onClick={selectActivity}
+          selectActivity={selectActivity}
           deleteActivity={deleteActivity}
         />
       </Grid.Column>

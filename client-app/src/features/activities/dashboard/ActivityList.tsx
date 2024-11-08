@@ -3,13 +3,13 @@ import { Button, Item, Label, Segment } from "semantic-ui-react";
 
 interface Props {
   activities: Activity[];
-  onClick: (id: string) => void;
+  selectActivity: (id: string) => void;
   deleteActivity: (id: string) => void;
 }
 
 export default function ActivityList({
   activities,
-  onClick,
+  selectActivity,
   deleteActivity,
 }: Props) {
   return (
@@ -28,7 +28,7 @@ export default function ActivityList({
               </Item.Description>
               <Item.Extra>
                 <Button
-                  onClick={() => onClick(a.id)}
+                  onClick={() => selectActivity(a.id)}
                   floated="right"
                   content="View"
                   color="blue"
