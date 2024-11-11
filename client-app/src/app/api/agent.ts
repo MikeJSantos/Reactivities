@@ -26,8 +26,14 @@ const requests = {
   put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
   del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
+const baseUrl = "/activities";
+const getUrl = (id: string) => `${baseUrl}/${id}`;
 const Activities = {
-  list: () => requests.get<Activity[]>("/activities"),
+  list: () => requests.get<Activity[]>(baseUrl),
+  details: (id: string) => requests.get<Activity>(getUrl(id)),
+  create: (activity: Activity) => axios.post(baseUrl, activity),
+  update: (activity: Activity) => axios.put(getUrl(activity.id), activity),
+  delete: (id: string) => axios.delete(getUrl(id)),
 };
 const agent = { Activities };
 
