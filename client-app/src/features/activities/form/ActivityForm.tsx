@@ -52,7 +52,7 @@ export function ActivityForm({
           placeholder="Category"
         />
         <Form.Input
-          name="date"
+          name="Date"
           value={activity.date}
           onChange={onChange}
           placeholder="Date"
