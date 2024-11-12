@@ -4,7 +4,7 @@ import agent from "../api/agent";
 
 export default class ActivityStore {
   activities: Activity[] = [];
-  selectedActivity: Activity | null = null;
+  selectedActivity: Activity | undefined = undefined;
   editMode = false;
   loading = false;
   initialLoading = false;
@@ -30,4 +30,16 @@ export default class ActivityStore {
 
     this.setInitialLoading(false);
   };
+
+  selectActivity = (id: string) =>
+    (this.selectedActivity = this.activities.find((a) => a.id === id));
+
+  deselectActivity = () => (this.selectedActivity = undefined);
+
+  openForm = (id?: string) => {
+    id ? this.selectActivity(id) : this.deselectActivity();
+    this.editMode = true;
+  };
+
+  closeForm = () => (this.editMode = false);
 }

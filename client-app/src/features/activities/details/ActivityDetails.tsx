@@ -7,33 +7,28 @@ import {
   CardMeta,
   Image,
 } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-interface Props {
-  activity: Activity;
-  deselectActivity: () => void;
-  openForm: (id: string) => void;
-}
+export function ActivityDetails() {
+  const { activityStore } = useStore();
+  const { selectedActivity, openForm, deselectActivity } = activityStore;
+  if (!selectedActivity) return <LoadingComponent />;
 
-export function ActivityDetails({
-  activity,
-  deselectActivity,
-  openForm,
-}: Props) {
   return (
     <Card fluid>
-      <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
+      <Image src={`/assets/categoryImages/${selectedActivity.category}.jpg`} />
       <CardContent>
-        <CardHeader>{activity.title}</CardHeader>
+        <CardHeader>{selectedActivity.title}</CardHeader>
         <CardMeta>
-          <span>{activity.date}</span>
+          <span>{selectedActivity.date}</span>
         </CardMeta>
-        <CardDescription>{activity.description}</CardDescription>
+        <CardDescription>{selectedActivity.description}</CardDescription>
       </CardContent>
       <CardContent extra>
         <Button.Group widths="2">
           <Button
-            onClick={() => openForm(activity.id)}
+            onClick={() => openForm(selectedActivity.id)}
             basic
             color="blue"
             content="Edit"

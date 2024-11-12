@@ -22,23 +22,6 @@ function App() {
     activityStore.loadActivities();
   }, [activityStore]);
 
-  function selectActivity(id: string) {
-    setSelectedActivity(activities.find((a) => a.id == id));
-  }
-
-  function deselectActivity() {
-    setSelectedActivity(undefined);
-  }
-
-  function openForm(id?: string) {
-    id ? selectActivity(id!) : deselectActivity();
-    setEditMode(true);
-  }
-
-  function closeForm() {
-    setEditMode(false);
-  }
-
   function createOrEditActivity(activity: Activity) {
     setSubmitting(true);
 
@@ -80,16 +63,10 @@ function App() {
 
   return (
     <>
-      <NavBar openForm={openForm} />
+      <NavBar />
       <Container style={{ marginTop: "7em" }}>
         <ActivityDashboard
           activities={activityStore.activities}
-          selectedActivity={selectedActivity}
-          selectActivity={selectActivity}
-          deselectActivity={deselectActivity}
-          editMode={editMode}
-          openForm={openForm}
-          closeForm={closeForm}
           createOrEditActivity={createOrEditActivity}
           deleteActivity={deleteActivity}
           submitting={submitting}
