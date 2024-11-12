@@ -13,8 +13,11 @@ export default class ActivityStore {
     makeAutoObservable(this);
   }
 
+  setInitialLoading = (state: boolean) => (this.initialLoading = state);
+
   loadActivities = async () => {
-    this.initialLoading = true;
+    this.setInitialLoading(true);
+
     try {
       const activities = await agent.Activities.list();
       activities.forEach((a) => {
@@ -24,6 +27,7 @@ export default class ActivityStore {
     } catch (error) {
       console.log(error);
     }
-    this.initialLoading = false;
+
+    this.setInitialLoading(false);
   };
 }
