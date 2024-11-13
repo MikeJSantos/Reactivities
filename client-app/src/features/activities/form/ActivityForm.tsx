@@ -53,7 +53,7 @@ export default observer(function ActivityForm() {
           placeholder="Category"
         />
         <Form.Input
-          name="Date"
+          name="date"
           value={activity.date}
           onChange={onChange}
           placeholder="Date"
