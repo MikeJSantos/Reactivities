@@ -16,14 +16,17 @@ export default class ActivityStore {
 
   setInitialLoading = (state: boolean) => (this.initialLoading = state);
 
+  setActivities = (activities: Activity[]) => (this.activities = activities);
+
   loadActivities = async () => {
+    if (this.initialLoading) return;
     this.setInitialLoading(true);
 
     try {
       const activities = await agent.Activities.list();
       activities.forEach((a) => {
         a.date = a.date.split("T")[0];
-        this.activities.push(a);
+        this.setActivities([...this.activities, a]);
       });
     } catch (error) {
       console.log(error);
@@ -65,12 +68,26 @@ export default class ActivityStore {
     try {
       await agent.Activities.update(activity);
       runInAction(() => {
-        this.activities = [
+        this.setActivities([
           ...this.activities.filter((a) => a.id !== activity.id),
           activity,
-        ];
+        ]);
         this.selectedActivity = activity;
         this.editMode = false;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    runInAction(() => (this.loading = false));
+  };
+
+  deleteActivity = async (id: string) => {
+    this.loading = true;
+    try {
+      await agent.Activities.delete(id);
+      runInAction(() => {
+        this.setActivities([...this.activities.filter((a) => a.id !== id)]);
+        
       });
     } catch (error) {
       console.log(error);

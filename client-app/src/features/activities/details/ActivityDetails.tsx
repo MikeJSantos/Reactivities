@@ -13,7 +13,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 export function ActivityDetails() {
   const { activityStore } = useStore();
   const { selectedActivity, openForm, deselectActivity } = activityStore;
-  if (!selectedActivity) return <LoadingComponent />;
+  if (!selectedActivity) return <LoadingComponent content="Loading details" />;
 
   return (
     <Card fluid>
