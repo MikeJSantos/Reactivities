@@ -3,7 +3,6 @@ import { Container } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import { Activity } from "../models/activity";
-import { v4 as uuid } from "uuid";
 import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import { useStore } from "../stores/store";
@@ -12,43 +11,11 @@ import { observer } from "mobx-react-lite";
 function App() {
   const { activityStore } = useStore();
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<
-    Activity | undefined
-  >(undefined);
-  const [editMode, setEditMode] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     activityStore.loadActivities();
   }, [activityStore]);
-
-  function createOrEditActivity(activity: Activity) {
-    setSubmitting(true);
-
-    function updateState() {
-      setSelectedActivity(activity);
-      setEditMode(false);
-      setSubmitting(false);
-    }
-
-    if (activity.id) {
-      agent.Activities.update(activity)
-        .then(() => {
-          setActivities([
-            ...activities.filter((a) => a.id !== activity.id),
-            activity,
-          ]);
-        })
-        .then(updateState);
-    } else {
-      activity.id = uuid();
-      agent.Activities.create(activity)
-        .then(() => {
-          setActivities([...activities, activity]);
-        })
-        .then(updateState);
-    }
-  }
 
   function deleteActivity(id: string) {
     setSubmitting(true);
@@ -67,7 +34,6 @@ function App() {
       <Container style={{ marginTop: "7em" }}>
         <ActivityDashboard
           activities={activityStore.activities}
-          createOrEditActivity={createOrEditActivity}
           deleteActivity={deleteActivity}
           submitting={submitting}
         />

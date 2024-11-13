@@ -1,16 +1,17 @@
 import { Button, Form, Segment } from "semantic-ui-react";
-import { Activity } from "../../../app/models/activity";
 import { ChangeEvent, useState } from "react";
 import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-interface Props {
-  createOrEditActivity: (activity: Activity) => void;
-  submitting: boolean;
-}
-
-export function ActivityForm({ createOrEditActivity, submitting }: Props) {
+export default observer(function ActivityForm() {
   const { activityStore } = useStore();
-  const { selectedActivity, closeForm } = activityStore;
+  const {
+    selectedActivity,
+    closeForm,
+    createActivity,
+    updateActivity,
+    loading,
+  } = activityStore;
 
   const initialState = selectedActivity ?? {
     id: "",
@@ -26,10 +27,13 @@ export function ActivityForm({ createOrEditActivity, submitting }: Props) {
     const { name, value } = e.target;
     setActivity({ ...activity, [name]: value });
   }
+  function submit() {
+    activity.id === "" ? createActivity(activity) : updateActivity(activity);
+  }
 
   return (
     <Segment clearing>
-      <Form onSubmit={() => createOrEditActivity(activity)} autoComplete="off">
+      <Form onSubmit={submit} autoComplete="off">
         <Form.Input
           name="title"
           value={activity.title}
@@ -68,7 +72,7 @@ export function ActivityForm({ createOrEditActivity, submitting }: Props) {
           placeholder="Venue"
         />
         <Button
-          loading={submitting}
+          loading={loading}
           floated="right"
           positive
           type="submit"
@@ -83,4 +87,4 @@ export function ActivityForm({ createOrEditActivity, submitting }: Props) {
       </Form>
     </Segment>
   );
-}
+});
