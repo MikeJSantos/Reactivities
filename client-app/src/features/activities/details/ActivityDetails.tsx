@@ -12,7 +12,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 export function ActivityDetails() {
   const { activityStore } = useStore();
-  const { selectedActivity, openForm, deselectActivity } = activityStore;
+  const { selectedActivity } = activityStore;
   if (!selectedActivity) return <LoadingComponent content="Loading details" />;
 
   return (
@@ -27,18 +27,8 @@ export function ActivityDetails() {
       </CardContent>
       <CardContent extra>
         <Button.Group widths="2">
-          <Button
-            onClick={() => openForm(selectedActivity.id)}
-            basic
-            color="blue"
-            content="Edit"
-          />
-          <Button
-            basic
-            color="grey"
-            content="Close"
-            onClick={() => deselectActivity()}
-          />
+          <Button basic color="blue" content="Edit" />
+          <Button basic color="grey" content="Close" />
         </Button.Group>
       </CardContent>
     </Card>

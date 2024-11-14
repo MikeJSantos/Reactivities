@@ -8,7 +8,6 @@ export default observer(function ActivityList() {
   const { activityStore } = useStore();
   const {
     activitiesByDate,
-    selectActivity,
     deleteActivity: _deleteActivity,
     loading,
   } = activityStore;
