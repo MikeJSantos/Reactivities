@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 export default observer(function ActivityList() {
   const { activityStore } = useStore();
   const {
-    activities,
+    activitiesByDate,
     selectActivity,
     deleteActivity: _deleteActivity,
     loading,
@@ -20,7 +20,7 @@ export default observer(function ActivityList() {
   return (
     <Segment>
       <Item.Group>
-        {activities.map((a) => (
+        {activitiesByDate.map((a) => (
           <Item key={a.id}>
             <Item.Content>
               <Item.Header as="a">{a.title}</Item.Header>
