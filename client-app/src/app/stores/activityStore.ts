@@ -8,7 +8,7 @@ export default class ActivityStore {
   selectedActivity: Activity | undefined = undefined;
   editMode = false;
   loading = false;
-  initialLoading = true;
+  initialLoading = false;
 
   constructor() {
     makeAutoObservable(this);
