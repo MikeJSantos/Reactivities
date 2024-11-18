@@ -31,7 +31,7 @@ export default class ActivityStore {
     } catch (error) {
       console.log(error);
     }
-    this.initialLoading = false;
+    runInAction(() => (this.initialLoading = false));
   };
 
   setActivity = (activity: Activity) => {
