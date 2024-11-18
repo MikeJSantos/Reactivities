@@ -20,17 +20,18 @@ export default class ActivityStore {
     );
   }
 
-  setInitialLoading = (state: boolean) => (this.initialLoading = state);
+  setSelectedActivity = (activity: Activity) =>
+    (this.selectedActivity = activity);
 
   loadActivities = async () => {
+    this.initialLoading = true;
     try {
       const activities = await agent.Activities.list();
       activities.forEach((a) => this.setActivity(a));
     } catch (error) {
       console.log(error);
     }
-
-    this.setInitialLoading(false);
+    this.initialLoading = false;
   };
 
   setActivity = (activity: Activity) => {
@@ -40,16 +41,17 @@ export default class ActivityStore {
 
   loadActivity = async (id: string) => {
     let activity = this.getActivity(id);
-    if (activity) this.selectedActivity = activity;
+    if (activity) this.setSelectedActivity(activity);
     else {
-      this.setInitialLoading(true);
+      this.initialLoading = true;
       try {
         activity = await agent.Activities.details(id);
         this.setActivity(activity);
+        this.setSelectedActivity(activity);
       } catch (error) {
         console.log(error);
       }
-      this.setInitialLoading(false);
+      this.initialLoading = false;
     }
   };
 
@@ -62,7 +64,7 @@ export default class ActivityStore {
       await agent.Activities.create(activity);
       runInAction(() => {
         this.map.set(activity.id, activity);
-        this.selectedActivity = activity;
+        this.setSelectedActivity(activity);
         this.editMode = false;
       });
     } catch (error) {
@@ -77,7 +79,7 @@ export default class ActivityStore {
       await agent.Activities.update(activity);
       runInAction(() => {
         this.map.set(activity.id, activity);
-        this.selectedActivity = activity;
+        this.setSelectedActivity(activity);
         this.editMode = false;
       });
     } catch (error) {

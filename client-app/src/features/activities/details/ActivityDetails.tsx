@@ -9,21 +9,35 @@ import {
 } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { useParams } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
 
-export function ActivityDetails() {
+export default observer(function ActivityDetails() {
   const { activityStore } = useStore();
-  const { selectedActivity } = activityStore;
-  if (!selectedActivity) return <LoadingComponent content="Loading details" />;
+  const {
+    selectedActivity: activity,
+    loadActivity,
+    initialLoading,
+  } = activityStore;
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) loadActivity(id);
+  }, [id, loadActivity]);
+
+  if (initialLoading || !activity)
+    return <LoadingComponent content="Loading details" />;
 
   return (
     <Card fluid>
-      <Image src={`/assets/categoryImages/${selectedActivity.category}.jpg`} />
+      <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
       <CardContent>
-        <CardHeader>{selectedActivity.title}</CardHeader>
+        <CardHeader>{activity.title}</CardHeader>
         <CardMeta>
-          <span>{selectedActivity.date}</span>
+          <span>{activity.date}</span>
         </CardMeta>
-        <CardDescription>{selectedActivity.description}</CardDescription>
+        <CardDescription>{activity.description}</CardDescription>
       </CardContent>
       <CardContent extra>
         <Button.Group widths="2">
@@ -33,4 +47,4 @@ export function ActivityDetails() {
       </CardContent>
     </Card>
   );
-}
+});
