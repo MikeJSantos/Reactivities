@@ -1,16 +1,14 @@
 import { Grid } from "semantic-ui-react";
 import ActivityList from "./ActivityList";
-import ActivityDetails from "../details/ActivityDetails";
-import ActivityForm from "../form/ActivityForm";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import ActivityFilters from "./ActivityFilters";
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { selectedActivity, editMode, initialLoading, loadActivities, map } =
-    activityStore;
+  const { initialLoading, loadActivities, map } = activityStore;
 
   useEffect(() => {
     // edge case: navigating to /manage/:id, then hitting Cancel loads only 1 activity
@@ -25,8 +23,7 @@ export default observer(function ActivityDashboard() {
         <ActivityList />
       </Grid.Column>
       <Grid.Column width="6">
-        {selectedActivity && !editMode && <ActivityDetails />}
-        {editMode && <ActivityForm />}
+        <ActivityFilters />
       </Grid.Column>
     </Grid>
   );
