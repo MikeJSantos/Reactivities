@@ -16,6 +16,10 @@ public class Details
         private readonly DataContext _context = context;
 
         public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
-            => await _context.Activities.FindAsync([request.Id], cancellationToken: cancellationToken);
+        {
+            var activity = await _context.Activities.FindAsync([request.Id], cancellationToken: cancellationToken)
+                ?? throw new Exception($"Activity ID ({request.Id}) not found.");
+            return activity;
+        }
     }
 }
