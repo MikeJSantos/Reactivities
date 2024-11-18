@@ -9,11 +9,13 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { selectedActivity, editMode, initialLoading } = activityStore;
+  const { selectedActivity, editMode, initialLoading, loadActivities, map } =
+    activityStore;
 
   useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
+    // edge case: navigating to /manage/:id, then hitting Cancel loads only 1 activity
+    if (map.size <= 1) loadActivities();
+  }, [map.size, loadActivities]);
 
   if (initialLoading) return <LoadingComponent content="Loading app" />;
 
