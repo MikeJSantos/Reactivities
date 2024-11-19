@@ -7,8 +7,12 @@ namespace API.Controllers;
 public class ActivitiesController : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<List<Activity>>> GetActivities()
-        => await Mediator.Send(new List.Query());
+    public async Task<IActionResult> GetActivities()
+    {
+        var request = new List.Query();
+        var result = await Mediator.Send(request); ;
+        return HandleResult(result);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetActivity(Guid id)
@@ -21,8 +25,9 @@ public class ActivitiesController : BaseApiController
     [HttpPost]
     public async Task<IActionResult> CreateActivity(Activity activity)
     {
-        await Mediator.Send(new Create.Command { Activity = activity });
-        return Ok();
+        var request = new Create.Command { Activity = activity };
+        var result = await Mediator.Send(request);
+        return HandleResult(result);
     }
 
     [HttpPut("{id}")]
