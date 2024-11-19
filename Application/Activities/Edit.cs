@@ -22,8 +22,8 @@ public class Edit
 
     public class Handler(DataContext context, IMapper mapper) : IRequestHandler<Command, Result<Unit>>
     {
-        private DataContext _context = context;
-        private IMapper _mapper = mapper;
+        private readonly DataContext _context = context;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
