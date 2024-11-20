@@ -17,13 +17,21 @@ axios.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    const { data, status } = error.response as AxiosResponse;
+    const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
       case 400:
-        if (data.errors) {
+        debugger;
+        const errors = data.errors;
+        if (
+          config.method === "get" &&
+          Object.prototype.hasOwnProperty.call(errors, "id")
+        ) {
+          router.navigate("/not-found");
+        }
+        if (errors) {
           const modalStateErrors = [];
-          for (const key in data.errors) {
-            const error = data.errors[key];
+          for (const key in errors) {
+            const error = errors[key];
             if (error) modalStateErrors.push(error);
           }
           throw modalStateErrors.flat();
