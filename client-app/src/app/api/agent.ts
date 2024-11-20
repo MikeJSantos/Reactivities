@@ -16,10 +16,19 @@ axios.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    const { data, status } = error.response!;
+    const { data, status } = error.response as AxiosResponse;
     switch (status) {
       case 400:
-        toast.error("Bad request");
+        if (data.errors) {
+          const modalStateErrors = [];
+          for (const key in data.errors) {
+            const error = data.errors[key];
+            if (error) modalStateErrors.push(error);
+          }
+          throw modalStateErrors.flat();
+        } else {
+          toast.error(data);
+        }
         break;
       case 401:
         toast.error("Unauthorized");
@@ -28,7 +37,6 @@ axios.interceptors.response.use(
         toast.error("Forbidden");
         break;
       case 404:
-        // toast.error("Not found");
         router.navigate("/not-found");
         break;
       case 500:
