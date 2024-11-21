@@ -8,6 +8,7 @@ import { Activity } from "../../../app/models/activity";
 import { v4 as uuid } from "uuid";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import MyTextInput from "../../../app/common/form/MyTextInput";
 
 export default observer(function ActivityForm() {
   const { activityStore } = useStore();
@@ -31,6 +32,11 @@ export default observer(function ActivityForm() {
   });
   const validationSchema = Yup.object({
     title: Yup.string().required("Title required"),
+    category: Yup.string().required(),
+    description: Yup.string().required("Description required"),
+    date: Yup.string().required(),
+    city: Yup.string().required(),
+    venue: Yup.string().required(),
   });
   useEffect(() => {
     if (id) loadActivity(id).then((activity) => setActivity(activity!));
@@ -60,18 +66,12 @@ export default observer(function ActivityForm() {
       >
         {({ handleSubmit }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
-            <FormField>
-              <Field placeholder="Title" name="title" />
-              <ErrorMessage
-                name="title"
-                render={(error) => <Label basic color="red" content={error} />}
-              />
-            </FormField>
-            <Field name="description" placeholder="Description" />
-            <Field name="category" placeholder="Category" />
-            <Field name="date" placeholder="Date" type="date" />
-            <Field name="city" placeholder="City" />
-            <Field name="venue" placeholder="Venue" />
+            <MyTextInput name="title" placeholder="title" />
+            <MyTextInput name="description" placeholder="Description" />
+            <MyTextInput name="category" placeholder="Category" />
+            <MyTextInput name="date" placeholder="Date" />
+            <MyTextInput name="city" placeholder="City" />
+            <MyTextInput name="venue" placeholder="Venue" />
             <Button
               loading={loading}
               floated="right"
