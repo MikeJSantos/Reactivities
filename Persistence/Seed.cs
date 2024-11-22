@@ -1,4 +1,5 @@
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
@@ -44,5 +45,27 @@ namespace Persistence
             };
             activities.Add(activity);
         }
+
+        public static async Task SeedUsers(UserManager<AppUser> userManager)
+        {
+            if (userManager.Users.Any()) return;
+
+            var users = new List<AppUser>
+            {
+                GetUser("bob"),
+                GetUser("tom"),
+                GetUser("jane"),
+            };
+
+            foreach (var user in users)
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+        }
+
+        private static AppUser GetUser(string name) => new()
+        {
+            DisplayName = name[0].ToString().ToUpper() + name[1..],
+            UserName = name,
+            Email = $"{name}@test.com"
+        };
     }
 }
