@@ -12,6 +12,7 @@ import MyTextInput from "../../../app/common/form/MyTextInput";
 import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
+import MyDateInput from "../../../app/common/form/MyDateInput";
 
 export default observer(function ActivityForm() {
   const { activityStore } = useStore();
@@ -69,14 +70,20 @@ export default observer(function ActivityForm() {
       >
         {({ handleSubmit }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
-            <MyTextInput name="title" placeholder="title" />
+            <MyTextInput name="title" placeholder="Title" />
             <MyTextArea name="description" placeholder="Description" rows={3} />
             <MySelectInput
               name="category"
               placeholder="Category"
               options={categoryOptions}
             />
-            <MyTextInput name="date" placeholder="Date" />
+            <MyDateInput
+              name="date"
+              placeholderText="Date"
+              showTimeSelect
+              timeCaption="time"
+              dateFormat="MMMM d, yyyy h:mm aa"
+            />
             <MyTextInput name="city" placeholder="City" />
             <MyTextInput name="venue" placeholder="Venue" />
             <Button
