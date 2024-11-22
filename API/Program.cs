@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+var services = builder.Services;
 
-var connectionString = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddApplicationServices(connectionString);
+var connectionString = configuration.GetConnectionString("Default");
+services.AddApplicationServices(connectionString);
+services.AddIdentityServices(configuration);
 
 var app = builder.Build();
 
