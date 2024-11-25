@@ -8,6 +8,9 @@ namespace API.Services;
 
 public class TokenService
 {
+    private readonly IConfiguration _config;
+    public TokenService(IConfiguration config) => _config = config;
+
     public string CreateToken(AppUser user)
     {
         var claims = new List<Claim>
@@ -16,9 +19,8 @@ public class TokenService
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Email, user.Email),
         };
-        // TODO: merge w/ IdentityServiceExtensions.cs
-        var key = "73J{`S*4z*Fs)1Q?KB4e'qAk[zv=D}4?IUKaJ`1]DITuHwb!P0tE4ABXXvw$Hd#x];2p(8|";
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var byteKey = Encoding.UTF8.GetBytes(_config["TokenKey"]);
+        var securityKey = new SymmetricSecurityKey(byteKey);
         var securityTokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),

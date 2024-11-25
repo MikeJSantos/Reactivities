@@ -14,14 +14,13 @@ public static class IdentityServiceExtensions
         services
             .AddIdentityCore<AppUser>(opt => opt.Password.RequireNonAlphanumeric = false)
             .AddEntityFrameworkStores<DataContext>();
-        // TODO: merge w/ TokenService.cs
-        var key = "73J{`S*4z*Fs)1Q?KB4e'qAk[zv=D}4?IUKaJ`1]DITuHwb!P0tE4ABXXvw$Hd#x];2p(8|";
+        var byteKey = Encoding.UTF8.GetBytes(config["TokenKey"]);
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    IssuerSigningKey = new SymmetricSecurityKey(byteKey),
                     ValidateAudience = false,
                     ValidateIssuer = false,
                     ValidateIssuerSigningKey = true,
