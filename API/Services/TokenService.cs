@@ -16,6 +16,7 @@ public class TokenService
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Email, user.Email),
         };
+        // TODO: merge w/ IdentityServiceExtensions.cs
         var key = "73J{`S*4z*Fs)1Q?KB4e'qAk[zv=D}4?IUKaJ`1]DITuHwb!P0tE4ABXXvw$Hd#x];2p(8|";
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         var securityTokenDescriptor = new SecurityTokenDescriptor
