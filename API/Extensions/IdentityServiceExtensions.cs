@@ -1,3 +1,4 @@
+using API.Services;
 using Domain;
 using Persistence;
 
@@ -10,8 +11,8 @@ public static class IdentityServiceExtensions
         services
             .AddIdentityCore<AppUser>(opt => opt.Password.RequireNonAlphanumeric = false)
             .AddEntityFrameworkStores<DataContext>();
-
         services.AddAuthentication();
+        services.AddScoped<TokenService>();
 
         return services;
     }
