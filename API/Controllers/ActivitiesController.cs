@@ -15,7 +15,6 @@ public class ActivitiesController : BaseApiController
         return HandleResult(result);
     }
 
-    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetActivity(Guid id)
     {
