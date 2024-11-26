@@ -1,9 +1,11 @@
+using System.Linq.Expressions;
 using API.DTO;
 using API.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -34,6 +36,35 @@ public class AccountController : ControllerBase
         {
             UserName = user.UserName,
             DisplayName = user.DisplayName,
+            Token = _tokenService.CreateToken(user),
+            Image = null,
+        };
+    }
+
+    [HttpPost("register")]
+    public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+    {
+        var users = _userManager.Users;
+
+        if (await users.AnyAsync(u => u.UserName == registerDTO.UserName))
+            return BadRequest("UserName is already taken");
+
+        if (await users.AnyAsync(u => u.Email == registerDTO.Email))
+            return BadRequest("Email is already taken");
+
+        var user = new AppUser
+        {
+            UserName = registerDTO.UserName,
+            Email = registerDTO.Email,
+            DisplayName = registerDTO.DisplayName,
+        };
+        var result = await _userManager.CreateAsync(user, registerDTO.Password);
+        if (!result.Succeeded) return BadRequest(result.Errors);
+
+        return new UserDTO
+        {
+            DisplayName = user.DisplayName,
+            UserName = user.UserName,
             Token = _tokenService.CreateToken(user),
             Image = null,
         };
