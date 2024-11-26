@@ -50,7 +50,7 @@ axios.interceptors.response.use(
         router.navigate("/not-found");
         break;
       case 500:
-        store.commonStore.SetServerError(data);
+        store.commonStore.setServerError(data);
         router.navigate("/server-error");
     }
     return Promise.reject(error);
