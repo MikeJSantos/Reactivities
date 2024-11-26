@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+using System.Security.Claims;
 using API.DTO;
 using API.Services;
 using Domain;
@@ -12,16 +12,10 @@ namespace API.Controllers;
 [AllowAnonymous]
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController : ControllerBase
+public class AccountController(UserManager<AppUser> userManager, TokenService tokenService) : ControllerBase
 {
-    private UserManager<AppUser> _userManager;
-    private readonly TokenService _tokenService;
-
-    public AccountController(UserManager<AppUser> userManager, TokenService tokenService)
-    {
-        _userManager = userManager;
-        _tokenService = tokenService;
-    }
+    private UserManager<AppUser> _userManager = userManager;
+    private readonly TokenService _tokenService = tokenService;
 
     [HttpPost("login")]
     public async Task<ActionResult<UserDTO>> Login(LoginDTO dto)
@@ -32,13 +26,7 @@ public class AccountController : ControllerBase
         var success = await _userManager.CheckPasswordAsync(user, dto.Password);
         if (!success) return Unauthorized();
 
-        return new UserDTO
-        {
-            UserName = user.UserName,
-            DisplayName = user.DisplayName,
-            Token = _tokenService.CreateToken(user),
-            Image = null,
-        };
+        return GetUserDTO(user);
     }
 
     [HttpPost("register")]
@@ -61,12 +49,25 @@ public class AccountController : ControllerBase
         var result = await _userManager.CreateAsync(user, registerDTO.Password);
         if (!result.Succeeded) return BadRequest(result.Errors);
 
-        return new UserDTO
-        {
-            DisplayName = user.DisplayName,
-            UserName = user.UserName,
-            Token = _tokenService.CreateToken(user),
-            Image = null,
-        };
+        return GetUserDTO(user);
     }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<UserDTO>> GetCurrentUser()
+    {
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null) return BadRequest("");
+
+        return GetUserDTO(user);
+    }
+
+    private UserDTO GetUserDTO(AppUser user) => new()
+    {
+        DisplayName = user.DisplayName,
+        UserName = user.UserName,
+        Token = _tokenService.CreateToken(user),
+        Image = null,
+    };
 }
