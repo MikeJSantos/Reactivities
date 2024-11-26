@@ -1,10 +1,13 @@
 using Application.Activities;
+using Application.Core;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+[AllowAnonymous]
 public class ActivitiesController : BaseApiController
 {
     [HttpGet]
@@ -27,8 +30,7 @@ public class ActivitiesController : BaseApiController
     public async Task<IActionResult> CreateActivity(Activity activity)
     {
         var request = new Create.Command { Activity = activity };
-        var result = await Mediator.Send(request);
-        return HandleResult(result);
+        return await Send(request);
     }
 
     [HttpPut("{id}")]
@@ -36,14 +38,18 @@ public class ActivitiesController : BaseApiController
     {
         activity.Id = id;
         var request = new Edit.Command { Activity = activity };
-        var result = await Mediator.Send(request);
-        return HandleResult(result);
+        return await Send(request);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteActivity(Guid id)
     {
         var request = new Delete.Command() { Id = id };
+        return await Send(request);
+    }
+
+    private async Task<IActionResult> Send(IRequest<Result<Unit>> request)
+    {
         var result = await Mediator.Send(request);
         return HandleResult(result);
     }
