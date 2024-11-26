@@ -3,6 +3,7 @@ import { Activity } from "../models/activity";
 import { toast } from "react-toastify";
 import { router } from "../router/routes";
 import { store } from "../stores/store";
+import { User, UserFormValues } from "../models/user";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -10,6 +11,23 @@ const sleep = (delay: number) => {
   });
 };
 axios.defaults.baseURL = "http://localhost:5000/api";
+
+function badRequest(data: any, method: string | undefined) {
+  const errors = data.errors;
+  if (method === "get" && Object.prototype.hasOwnProperty.call(errors, "id")) {
+    router.navigate("/not-found");
+  }
+  if (errors) {
+    const modalStateErrors = [];
+    for (const key in errors) {
+      const error = errors[key];
+      if (error) modalStateErrors.push(error);
+    }
+    throw modalStateErrors.flat();
+  } else {
+    toast.error(data);
+  }
+}
 
 axios.interceptors.response.use(
   async (response) => {
@@ -20,24 +38,7 @@ axios.interceptors.response.use(
     const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
       case 400:
-        debugger;
-        const errors = data.errors;
-        if (
-          config.method === "get" &&
-          Object.prototype.hasOwnProperty.call(errors, "id")
-        ) {
-          router.navigate("/not-found");
-        }
-        if (errors) {
-          const modalStateErrors = [];
-          for (const key in errors) {
-            const error = errors[key];
-            if (error) modalStateErrors.push(error);
-          }
-          throw modalStateErrors.flat();
-        } else {
-          toast.error(data);
-        }
+        badRequest(data, config.method);
         break;
       case 401:
         toast.error("Unauthorized");
@@ -73,6 +74,12 @@ const Activities = {
   update: (activity: Activity) => axios.put(getUrl(activity.id), activity),
   delete: (id: string) => axios.delete(getUrl(id)),
 };
-const agent = { Activities };
+const Account = {
+  current: () => requests.get<User>("/account"),
+  login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+  register: (user: UserFormValues) =>
+    requests.post<User>("/account/register", user),
+};
+const agent = { Activities, Account };
 
 export default agent;
