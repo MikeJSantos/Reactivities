@@ -8,6 +8,7 @@ import ActivityFilters from "./ActivityFilters";
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useStore();
+  // TODO: destructure objects on useStore() call
   const { initialLoading, loadActivities, map } = activityStore;
 
   useEffect(() => {

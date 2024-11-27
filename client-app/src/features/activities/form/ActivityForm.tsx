@@ -1,3 +1,4 @@
+// TODO: replace 16 instances of "../../../" with absolute paths
 import { Button, Header, Segment } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
