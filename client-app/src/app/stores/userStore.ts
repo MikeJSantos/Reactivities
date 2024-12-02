@@ -15,13 +15,26 @@ export default class UserStore {
     return !!this.user;
   }
 
+  postRegisterOrLoginActions = (user: User) => {
+    store.commonStore.setToken(user.token);
+    runInAction(() => (this.user = user));
+    router.navigate("/activities");
+    store.modalStore.closeModal();
+  };
+
+  register = async (creds: UserFormValues) => {
+    try {
+      const user = await agent.Account.register(creds);
+      this.postRegisterOrLoginActions(user);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   login = async (creds: UserFormValues) => {
     try {
       const user = await agent.Account.login(creds);
-      store.commonStore.setToken(user.token);
-      runInAction(() => (this.user = user));
-      router.navigate("/activities");
-      store.modalStore.closeModal();
+      this.postRegisterOrLoginActions(user);
     } catch (error) {
       throw error;
     }
