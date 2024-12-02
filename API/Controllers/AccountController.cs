@@ -36,10 +36,12 @@ public class AccountController(UserManager<AppUser> userManager, TokenService to
         var users = _userManager.Users;
 
         if (await users.AnyAsync(u => u.UserName == registerDTO.UserName))
-            return BadRequest("UserName is already taken");
+            ModelState.AddModelError("username", "Username taken");
 
         if (await users.AnyAsync(u => u.Email == registerDTO.Email))
-            return BadRequest("Email is already taken");
+            ModelState.AddModelError("email", "Email taken");
+
+        if (ModelState.ErrorCount > 0) return ValidationProblem();
 
         var user = new AppUser
         {
