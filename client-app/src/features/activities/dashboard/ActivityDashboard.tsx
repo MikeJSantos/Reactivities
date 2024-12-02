@@ -16,7 +16,7 @@ export default observer(function ActivityDashboard() {
     if (map.size <= 1) loadActivities();
   }, [map.size, loadActivities]);
 
-  if (initialLoading) return <LoadingComponent content="Loading app" />;
+  if (initialLoading) return <LoadingComponent content="Loading activities" />;
 
   return (
     <Grid>

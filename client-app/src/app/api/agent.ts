@@ -56,6 +56,11 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+axios.interceptors.request.use((config) => {
+  const token = store.commonStore.token;
+  if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 const requests = {
@@ -67,6 +72,7 @@ const requests = {
 };
 const baseUrl = "/activities";
 const getUrl = (id: string) => `${baseUrl}/${id}`;
+
 const Activities = {
   list: () => requests.get<Activity[]>(baseUrl),
   details: (id: string) => requests.get<Activity>(getUrl(id)),
@@ -80,6 +86,6 @@ const Account = {
   register: (user: UserFormValues) =>
     requests.post<User>("/account/register", user),
 };
-const agent = { Activities, Account };
 
+const agent = { Activities, Account };
 export default agent;
